@@ -95,7 +95,6 @@ func TestStartDeploymentInformer_CoversFunction(t *testing.T) {
 		StartDeploymentInformer(ctx, clientset)
 	}()
 
-	// Give the informer some time to start and process events
 	time.Sleep(1 * time.Second)
 	cancel()
 }
