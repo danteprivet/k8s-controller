@@ -14,7 +14,7 @@ func TestAddNewUser(t *testing.T) {
 		Users:   []string{"alice", "bob"},
 	}
 
-	k8s.AddNewUser("сharlie")
+	k8s.AddNewUser("charlie")
 
 	expected := []string{"alice", "bob", "charlie"}
 	for i, user := range expected {
