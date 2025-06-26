@@ -31,4 +31,5 @@ func AddDeploymentController(mgr manager.Manager) error {
 		For(&appsv1.Deployment{}).
 		WithOptions(controller.Options{MaxConcurrentReconciles: 1}).
 		Complete(r)
+
 }

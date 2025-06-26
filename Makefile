@@ -1,6 +1,6 @@
-APP = k8s-controller-tutorial
+APP = k8s-controller
 VERSION ?= $(shell git describe --tags --always --dirty)
-BUILD_FLAGS = -v -o $(APP) -ldflags "-X=github.com/den-vasyliev/$(APP)/cmd.appVersion=$(VERSION)"
+BUILD_FLAGS = -v -o $(APP) -ldflags "-X=github.com/oleksandr-san/$(APP)/cmd.appVersion=$(VERSION)"
 ENVTEST ?= $(LOCALBIN)/setup-envtest
 ENVTEST_VERSION ?= latest
 LOCALBIN ?= $(shell pwd)/bin
