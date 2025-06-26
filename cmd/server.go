@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/danteprivet/k8s-controller-tutorial/pkg/informer"
+	"github.com/danteprivet/k8s-controller/pkg/informer"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
