@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/danteprivet/k8s-controller/pkg/informer"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/valyala/fasthttp"
@@ -33,8 +34,33 @@ var serverCmd = &cobra.Command{
 		go informer.StartDeploymentInformer(ctx, clientset)
 
 		handler := func(ctx *fasthttp.RequestCtx) {
-			fmt.Fprintf(ctx, "Hello from FastHTTP!")
+			requestID := uuid.New().String()
+			ctx.Response.Header.Set("X-Request-ID", requestID)
+			logger := log.With().Str("request_id", requestID).Logger()
+			switch string(ctx.Path()) {
+			case "/deployments":
+				logger.Info().Msg("Deployments request received")
+				ctx.Response.Header.Set("Content-Type", "application/json")
+				deployments := informer.GetDeploymentNames()
+				logger.Info().Msgf("Deployments: %v", deployments)
+				ctx.SetStatusCode(200)
+				ctx.Write([]byte("["))
+				for i, name := range deployments {
+					ctx.WriteString("\"")
+					ctx.WriteString(name)
+					ctx.WriteString("\"")
+					if i < len(deployments)-1 {
+						ctx.WriteString(",")
+					}
+				}
+				ctx.Write([]byte("]"))
+				return
+			default:
+				logger.Info().Msg("Default request received")
+				fmt.Fprintf(ctx, "Hello from FastHTTP!")
+			}
 		}
+
 		addr := fmt.Sprintf(":%d", serverPort)
 		log.Info().Msgf("Starting FastHTTP server on %s (version: %s)", addr, appVersion)
 		if err := fasthttp.ListenAndServe(addr, handler); err != nil {
