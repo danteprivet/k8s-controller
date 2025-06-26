@@ -5,24 +5,20 @@ import (
 	"testing"
 	"time"
 
-	testutil "github.com/danteprivet/k8s-controller/pkg/testutil"
+	testutil "github.com/oleksandr-san/k8s-controller/pkg/testutil"
 	"github.com/stretchr/testify/require"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func TestDeploymentReconciler_BasicFlow(t *testing.T) {
 	mgr, k8sClient, _, cleanup := testutil.StartTestManager(t)
-	scheme := mgr.GetScheme()
-	err := appsv1.AddToScheme(scheme)
-	require.NoError(t, err)
 	defer cleanup()
 
 	// Register the controller before starting the manager
-	err = AddDeploymentController(mgr)
+	err := AddDeploymentController(mgr)
 	require.NoError(t, err)
 
 	go func() {
