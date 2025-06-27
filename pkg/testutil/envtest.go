@@ -27,6 +27,8 @@ func StartTestManager(t *testing.T) (mgr manager.Manager, k8sClient client.Clien
 	// Add the core Kubernetes schemes
 	require.NoError(t, scheme.AddToScheme(testScheme))
 	require.NoError(t, apiextensionsv1.AddToScheme(testScheme))
+	require.NoError(t, appsv1.AddToScheme(testScheme))
+	require.NoError(t, corev1.AddToScheme(testScheme))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -78,6 +80,10 @@ func SetupEnv(t *testing.T) (*envtest.Environment, *kubernetes.Clientset, func()
 
 	// Add the core Kubernetes schemes
 	err := scheme.AddToScheme(testScheme)
+	require.NoError(t, err)
+	err = appsv1.AddToScheme(testScheme)
+	require.NoError(t, err)
+	err = corev1.AddToScheme(testScheme)
 	require.NoError(t, err)
 
 	// Create a longer context timeout for environment startup
